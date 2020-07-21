@@ -4,8 +4,9 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 
 const contactRoute = require('./api/routes/contactRoutes')
-const mongoose = require('mongoose');
+const userRoute = require('./api/routes/userRoutes')
 
+const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost:27017/contactDB', {
     useNewUrlParser: true,
     useUnifiedTopology: true
@@ -18,10 +19,9 @@ app.use(cors())
 app.use(bodyParser.urlencoded({
     extended: true
 }))
+
 app.use(bodyParser.json())
-
 const db = mongoose.connection
-
 db.on('error', (err) => {
     console.log(err);
 })
@@ -30,6 +30,7 @@ db.once('open', () => {
 })
 
 app.use('/api/contact', contactRoute)
+app.use('/api/user', userRoute)
 
 const PORT = process.env.PORT || 4200
 app.listen(PORT, () => console.log(`Server is listening to the port ${PORT}`))
